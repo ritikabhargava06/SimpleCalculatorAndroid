@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     bclear.setOnClickListener(this);
     bHistory.setOnClickListener(this);
     }
-
     @Override
     public void onClick(View v) {
         if (v.getId()==R.id.button1){
