@@ -3,9 +3,7 @@ package com.example.simplecalculatorassignment1ritika;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,14 +26,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button bdivide;
     Button bequals;
     Button bclear;
+    Button bHistory;
     TextView resultView;
+    TextView historyView;
     Calculator cal = new Calculator();
-    boolean firstNum = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        int bid=R.id.button1;
     b1 = findViewById(R.id.button1);
     b2 = findViewById(R.id.button2);
     b3 = findViewById(R.id.button3);
@@ -52,8 +50,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     bdivide = findViewById(R.id.buttondivide);
     bequals = findViewById(R.id.buttonequals);
     bclear = findViewById(R.id.buttonclear);
+    bHistory = findViewById(R.id.buttonadvance);
 
     resultView = findViewById(R.id.resultTextView);
+    historyView = findViewById(R.id.historyTextView);
+    historyView.setText(((MyApp)getApplication()).calculationHistory);
+    historyView.setVisibility(View.INVISIBLE);
+
     b1.setOnClickListener(this);
     b2.setOnClickListener(this);
     b3.setOnClickListener(this);
@@ -70,9 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     bdivide.setOnClickListener(this);
     bequals.setOnClickListener(this);
     bclear.setOnClickListener(this);
-
-
-
+    bHistory.setOnClickListener(this);
     }
 
     @Override
@@ -110,25 +111,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if (v.getId()==R.id.buttonequals){
             cal.divisorIsZero=false;
             if(resultView.getText()!=""){
-                if (cal.push((String) resultView.getText())){
+                String input = (String) resultView.getText();
+                if (cal.push(input)){
                     int finalRes = cal.calculate();
                     if (cal.divisorIsZero){
-                        //alert user that cant divide by 0
                         Toast.makeText(this, "Cannot divide by 0", Toast.LENGTH_LONG).show();
-                        Log.d("Error", "Cant divide by 0");
+                        resultView.setText("");
                     }else{
                         resultView.setText(String.valueOf(finalRes));
-                        Log.d("final result", String.valueOf(finalRes));
+                        if (((MyApp)getApplication()).calculationHistory.equals("")){
+                            ((MyApp)getApplication()).calculationHistory = input+"="+finalRes;
+                        }else{
+                            ((MyApp)getApplication()).calculationHistory = ((MyApp)getApplication()).calculationHistory+"\n"+input+"="+finalRes;
+                        }
+                        historyView.setText(((MyApp)getApplication()).calculationHistory);
                     }
                 }else{
-                    //alert user to enter valid input
                     Toast.makeText(this, "Please enter a valid input", Toast.LENGTH_LONG).show();
+                    resultView.setText("");
                 }
             }else{
-                //alert the user to enter input
                 Toast.makeText(this,"Please provide an input", Toast.LENGTH_SHORT).show();
             }
-
+        }else if (v.getId()==R.id.buttonadvance){
+            if (bHistory.getText().equals("ADVANCE - WITH HISTORY")){
+                bHistory.setText(R.string.standard_button_text);
+                historyView.setVisibility(View.VISIBLE);
+            }else {
+                bHistory.setText(R.string.history_button_text);
+                historyView.setVisibility(View.INVISIBLE);
+            }
         }
     }
 
@@ -137,5 +149,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String newResult = resultText+pressedButton.getText();
         resultView.setText(newResult);
     }
-
 }

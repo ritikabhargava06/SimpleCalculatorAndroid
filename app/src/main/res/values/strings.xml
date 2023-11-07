@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">SimpleCalculatorAssignment1Ritika</string>
+    <string name="app_name">Simple Calculator</string>
+    <string name="history_button_text">ADVANCE - WITH HISTORY</string>>
+    <string name="standard_button_text">STANDARD - NO HISTORY</string>
 </resources>
