@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     TextView resultView;
     TextView historyView;
     Calculator cal = new Calculator();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +75,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     bequals.setOnClickListener(this);
     bclear.setOnClickListener(this);
     bHistory.setOnClickListener(this);
+
+        if (((MyApp)getApplication()).historyModeOn){
+            bHistory.setText(R.string.standard_button_text);
+            historyView.setVisibility(View.VISIBLE);
+        }else{
+            bHistory.setText(R.string.history_button_text);
+            historyView.setVisibility(View.INVISIBLE);
+        }
     }
     @Override
     public void onClick(View v) {
@@ -117,13 +126,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         Toast.makeText(this, "Cannot divide by 0", Toast.LENGTH_LONG).show();
                         resultView.setText("");
                     }else{
-                        resultView.setText(String.valueOf(finalRes));
-                        if (((MyApp)getApplication()).calculationHistory.equals("")){
-                            ((MyApp)getApplication()).calculationHistory = input+"="+finalRes;
-                        }else{
-                            ((MyApp)getApplication()).calculationHistory = ((MyApp)getApplication()).calculationHistory+"\n"+input+"="+finalRes;
+                        resultView.setText(input+"="+finalRes);
+                        if(((MyApp)getApplication()).historyModeOn){
+                            if (((MyApp)getApplication()).calculationHistory.equals("")){
+                                ((MyApp)getApplication()).calculationHistory = input+"="+finalRes;
+                            }else{
+                                ((MyApp)getApplication()).calculationHistory = ((MyApp)getApplication()).calculationHistory+"\n"+input+"="+finalRes;
+                            }
+                            historyView.setText(((MyApp)getApplication()).calculationHistory);
                         }
-                        historyView.setText(((MyApp)getApplication()).calculationHistory);
                     }
                 }else{
                     Toast.makeText(this, "Please enter a valid input", Toast.LENGTH_LONG).show();
@@ -133,12 +144,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(this,"Please provide an input", Toast.LENGTH_SHORT).show();
             }
         }else if (v.getId()==R.id.buttonadvance){
-            if (bHistory.getText().equals("ADVANCE - WITH HISTORY")){
+            String str = getResources().getString(R.string.history_button_text);
+            if (bHistory.getText().toString().equals(str)){
                 bHistory.setText(R.string.standard_button_text);
                 historyView.setVisibility(View.VISIBLE);
+                ((MyApp)getApplication()).historyModeOn=true;
             }else {
                 bHistory.setText(R.string.history_button_text);
                 historyView.setVisibility(View.INVISIBLE);
+                ((MyApp)getApplication()).historyModeOn=false;
             }
         }
     }
