@@ -86,74 +86,93 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     @Override
     public void onClick(View v) {
-        if (v.getId()==R.id.button1){
-            setResultView(b1);
-        }else if (v.getId()==R.id.button2){
-            setResultView(b2);
-        }else if (v.getId()==R.id.button3){
-            setResultView(b3);
-        }else if (v.getId()==R.id.button4){
-            setResultView(b4);
-        }else if (v.getId()==R.id.button5){
-            setResultView(b5);
-        }else if (v.getId()==R.id.button6){
-            setResultView(b6);
-        }else if (v.getId()==R.id.button7){
-            setResultView(b7);
-        }else if (v.getId()==R.id.button8){
-            setResultView(b8);
-        }else if (v.getId()==R.id.button9){
-            setResultView(b9);
-        }else if (v.getId()==R.id.button0){
-            setResultView(b0);
-        }else if (v.getId()==R.id.buttonplus){
-            setResultView(bplus);
-        }else if (v.getId()==R.id.buttonminus){
-            setResultView(bminus);
-        }else if (v.getId()==R.id.buttonmultiply){
-            setResultView(bmultiply);
-        }else if (v.getId()==R.id.buttondivide){
-            setResultView(bdivide);
-        }else if (v.getId()==R.id.buttonclear){
-            resultView.setText("");
-        }else if (v.getId()==R.id.buttonequals){
-            cal.divisorIsZero=false;
-            if(resultView.getText()!=""){
-                String input = (String) resultView.getText();
-                if (cal.push(input)){
-                    int finalRes = cal.calculate();
-                    if (cal.divisorIsZero){
-                        Toast.makeText(this, "Cannot divide by 0", Toast.LENGTH_LONG).show();
-                        resultView.setText("");
-                    }else{
-                        resultView.setText(input+"="+finalRes);
-                        if(((MyApp)getApplication()).historyModeOn){
-                            if (((MyApp)getApplication()).calculationHistory.equals("")){
-                                ((MyApp)getApplication()).calculationHistory = input+"="+finalRes;
-                            }else{
-                                ((MyApp)getApplication()).calculationHistory = ((MyApp)getApplication()).calculationHistory+"\n"+input+"="+finalRes;
+
+        switch (v.getId()){
+            case R.id.button1:
+                setResultView(b1);
+                break;
+            case R.id.button2:
+                setResultView(b2);
+                break;
+            case R.id.button3:
+                setResultView(b3);
+                break;
+            case R.id.button4:
+                setResultView(b4);
+                break;
+            case R.id.button5:
+                setResultView(b5);
+                break;
+            case R.id.button6:
+                setResultView(b6);
+                break;
+            case R.id.button7:
+                setResultView(b7);
+                break;
+            case R.id.button8:
+                setResultView(b8);
+                break;
+            case R.id.button9:
+                setResultView(b9);
+                break;
+            case R.id.button0:
+                setResultView(b0);
+                break;
+            case R.id.buttonplus:
+                setResultView(bplus);
+                break;
+            case R.id.buttonminus:
+                setResultView(bminus);
+                break;
+            case R.id.buttonmultiply:
+                setResultView(bmultiply);
+                break;
+            case R.id.buttondivide:
+                setResultView(bdivide);
+                break;
+            case R.id.buttonclear:
+                resultView.setText("");
+                break;
+            case R.id.buttonequals:
+                cal.divisorIsZero=false;
+                if(resultView.getText()!=""){
+                    String input = (String) resultView.getText();
+                    if (cal.push(input)){
+                        int finalRes = cal.calculate();
+                        if (cal.divisorIsZero){
+                            Toast.makeText(this, "Cannot divide by 0", Toast.LENGTH_LONG).show();
+                            resultView.setText("");
+                        }else{
+                            resultView.setText(input+"="+finalRes);
+                            if(((MyApp)getApplication()).historyModeOn){
+                                if (((MyApp)getApplication()).calculationHistory.equals("")){
+                                    ((MyApp)getApplication()).calculationHistory = input+"="+finalRes;
+                                }else{
+                                    ((MyApp)getApplication()).calculationHistory = ((MyApp)getApplication()).calculationHistory+"\n"+input+"="+finalRes;
+                                }
+                                historyView.setText(((MyApp)getApplication()).calculationHistory);
                             }
-                            historyView.setText(((MyApp)getApplication()).calculationHistory);
                         }
+                    }else{
+                        Toast.makeText(this, "Please enter a valid input", Toast.LENGTH_LONG).show();
+                        resultView.setText("");
                     }
                 }else{
-                    Toast.makeText(this, "Please enter a valid input", Toast.LENGTH_LONG).show();
-                    resultView.setText("");
+                    Toast.makeText(this,"Please provide an input", Toast.LENGTH_SHORT).show();
                 }
-            }else{
-                Toast.makeText(this,"Please provide an input", Toast.LENGTH_SHORT).show();
-            }
-        }else if (v.getId()==R.id.buttonadvance){
-            String str = getResources().getString(R.string.history_button_text);
-            if (bHistory.getText().toString().equals(str)){
-                bHistory.setText(R.string.standard_button_text);
-                historyView.setVisibility(View.VISIBLE);
-                ((MyApp)getApplication()).historyModeOn=true;
-            }else {
-                bHistory.setText(R.string.history_button_text);
-                historyView.setVisibility(View.INVISIBLE);
-                ((MyApp)getApplication()).historyModeOn=false;
-            }
+                break;
+            case R.id.buttonadvance:
+                String str = getResources().getString(R.string.history_button_text);
+                if (bHistory.getText().toString().equals(str)){
+                    bHistory.setText(R.string.standard_button_text);
+                    historyView.setVisibility(View.VISIBLE);
+                    ((MyApp)getApplication()).historyModeOn=true;
+                }else {
+                    bHistory.setText(R.string.history_button_text);
+                    historyView.setVisibility(View.INVISIBLE);
+                    ((MyApp)getApplication()).historyModeOn=false;
+                }
+                break;
         }
     }
 
